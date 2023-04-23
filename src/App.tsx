@@ -1,53 +1,84 @@
-import { useState } from "react";
-
-import { ExpenseList, Expense } from "./expense-tracker/components/ExpenseList";
-import { ExpenseFilter } from "./expense-tracker/components/ExpenseFilter";
-import {
-  ExpenseForm,
-  ExpenseFormData,
-} from "./expense-tracker/components/ExpenseForm";
+import { AxiosError } from "./services/apiClient";
+import { userService, User } from "./services/userService";
+import { useUsers } from "./hooks/useUsers";
 
 function App() {
-  const [category, setCategory] = useState("");
+  const { users, error, isLoading, setError, setUsers } = useUsers();
 
-  const [expenses, setExpenses] = useState<Expense[]>([
-    { id: 1, description: "desc 1", amount: 1, category: "sport" },
-    { id: 2, description: "desc 2", amount: 2, category: "food" },
-    { id: 3, description: "desc 3", amount: 3, category: "books" },
-    { id: 4, description: "desc 4", amount: 4, category: "food" },
-  ]);
+  const deleteUser = ({ id }: User) => {
+    const origUsers = [...users];
 
-  const handleSelectCategory = (category: string) => setCategory(category);
+    setUsers(users.filter((user) => user.id !== id));
 
-  const handleAdd = (data: ExpenseFormData) => {
-    setExpenses((expenses) => [
-      ...expenses,
-      { ...data, id: expenses.length + 1 },
-    ]);
+    // Promise.reject(new AxiosError("error"))
+    userService.delete(id).catch((error) => {
+      setError((error as AxiosError).message);
+      setUsers(origUsers);
+    });
   };
 
-  const handleDelete = (id: number) =>
-    setExpenses((expenses) => expenses.filter((expense) => expense.id !== id));
+  const addUser = () => {
+    const origUsers = [...users];
+    const user: User = {
+      id: 0,
+      name: "New User",
+    };
 
-  const visibleExpenses = category
-    ? expenses.filter((expense) => expense.category === category)
-    : expenses;
+    setUsers([user, ...users]);
+
+    userService
+      .create(user)
+      .then(({ data: savedUser }) => setUsers([savedUser, ...users]))
+      .catch((error) => {
+        setError((error as AxiosError).message);
+        setUsers(origUsers);
+      });
+  };
+
+  const updateUser = (user: User) => {
+    const origUsers = [...users];
+    const updatedUser = { ...user, name: `${user.name}!!!` };
+
+    setUsers((users) => users.map((u) => (u.id === user.id ? updatedUser : u)));
+
+    userService.update(updatedUser).catch((error) => {
+      setError((error as AxiosError).message);
+      setUsers(origUsers);
+    });
+  };
 
   return (
-    <div>
-      <h3>Add product</h3>
-      <div className="mb-4">
-        <ExpenseForm onAdd={handleAdd} />
-      </div>
-      <div className="mb-4">
-        <h3>Filter</h3>
-        <ExpenseFilter onSelect={handleSelectCategory} />
-      </div>
-      <div>
-        <h3>Products</h3>
-        <ExpenseList expenses={visibleExpenses} onDelete={handleDelete} />
-      </div>
-    </div>
+    <>
+      {error && <p className="text-danger">{error}</p>}
+      {isLoading && <div className="spinner-border"></div>}
+      <button className="btn btn-primary mb-3" onClick={addUser}>
+        Add
+      </button>
+      <ul className="list-group">
+        {users.map((user) => (
+          <li
+            key={user.id}
+            className="list-group-item d-flex justify-content-between align-items-center"
+          >
+            {user.name}{" "}
+            <div className="d-flex gap-2">
+              <button
+                className="btn btn-outline-secondary"
+                onClick={() => updateUser(user)}
+              >
+                Update
+              </button>
+              <button
+                className="btn btn-outline-danger"
+                onClick={() => deleteUser(user)}
+              >
+                Delete
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }
 

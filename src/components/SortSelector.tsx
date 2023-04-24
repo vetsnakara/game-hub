@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-} from "@chakra-ui/react";
+import { Button, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { BsChevronDown } from "react-icons/bs";
 
 interface Props {
@@ -32,23 +25,21 @@ export const SortSelector = (props: Props) => {
   );
 
   return (
-    <Box>
-      <Menu>
-        <MenuButton as={Button} rightIcon={<BsChevronDown />}>
-          Order by: {currentSortOrder?.label || defaultSortOrder.label}
-        </MenuButton>
-        <MenuList>
-          {sortOrders.map((order) => (
-            <MenuItem
-              key={order.value}
-              value={order.value}
-              onClick={() => onSelectSortOrder(order.value)}
-            >
-              {order.label}
-            </MenuItem>
-          ))}
-        </MenuList>
-      </Menu>
-    </Box>
+    <Menu>
+      <MenuButton as={Button} rightIcon={<BsChevronDown />}>
+        Order by: {currentSortOrder?.label || defaultSortOrder.label}
+      </MenuButton>
+      <MenuList>
+        {sortOrders.map((order) => (
+          <MenuItem
+            key={order.value}
+            value={order.value}
+            onClick={() => onSelectSortOrder(order.value)}
+          >
+            {order.label}
+          </MenuItem>
+        ))}
+      </MenuList>
+    </Menu>
   );
 };

@@ -16,13 +16,20 @@ export interface Game {
   metacritic: number;
 }
 
-export const useGames = (selectedGenre: Genre | null) =>
-  useData<Game>({
+interface Options {
+  selectedGenre: Genre | null;
+  selectedPlatform: Platform | null;
+}
+
+export const useGames = ({ selectedGenre, selectedPlatform }: Options) => {
+  return useData<Game>({
     endpoint: "/games",
     requestConfig: {
       params: {
         genres: selectedGenre?.id,
+        platforms: selectedPlatform?.id,
       },
     },
-    deps: [selectedGenre?.id],
+    deps: [selectedGenre?.id, selectedPlatform?.id],
   });
+};

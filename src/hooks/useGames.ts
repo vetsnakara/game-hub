@@ -1,5 +1,5 @@
+import { GameQuery } from "../App";
 import { useData } from "./useData";
-import { Genre } from "./useGenres";
 
 export interface Platform {
   id: number;
@@ -16,20 +16,17 @@ export interface Game {
   metacritic: number;
 }
 
-interface Options {
-  selectedGenre: Genre | null;
-  selectedPlatform: Platform | null;
-}
+export const useGames = (gameQuery: GameQuery) => {
+  const { genre, platform } = gameQuery;
 
-export const useGames = ({ selectedGenre, selectedPlatform }: Options) => {
   return useData<Game>({
     endpoint: "/games",
     requestConfig: {
       params: {
-        genres: selectedGenre?.id,
-        platforms: selectedPlatform?.id,
+        genres: genre?.id,
+        platforms: platform?.id,
       },
     },
-    deps: [selectedGenre?.id, selectedPlatform?.id],
+    deps: [gameQuery],
   });
 };

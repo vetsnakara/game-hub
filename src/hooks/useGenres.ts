@@ -6,4 +6,4 @@ export interface Genre {
   image_background: string;
 }
 
-export const useGenres = () => useData<Genre>("/genres");
+export const useGenres = () => useData<Genre>({ endpoint: "/genres" });

@@ -17,7 +17,7 @@ export interface Game {
 }
 
 export const useGames = (gameQuery: GameQuery) => {
-  const { genre, platform } = gameQuery;
+  const { genre, platform, sortOrder } = gameQuery;
 
   return useData<Game>({
     endpoint: "/games",
@@ -25,6 +25,7 @@ export const useGames = (gameQuery: GameQuery) => {
       params: {
         genres: genre?.id,
         platforms: platform?.id,
+        ordering: sortOrder,
       },
     },
     deps: [gameQuery],

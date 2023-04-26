@@ -17,32 +17,33 @@ export const GameGrid = (props: Props) => {
 
   const skeletons = [1, 2, 3, 4, 5, 6];
 
-  return (
-    <>
-      {error && <Text>{error}</Text>}
-      <SimpleGrid
-        columns={{
-          sm: 1,
-          md: 2,
-          lg: 3,
-          xl: 4,
-        }}
-        spacing={6}
-        padding="10px"
-      >
-        {isLoading &&
-          skeletons.map((skeleton) => (
-            <GameCardContainer key={skeleton}>
-              <GameCardSkeleton />
-            </GameCardContainer>
-          ))}
+  if (error) {
+    return <Text>{error}</Text>;
+  }
 
-        {games.map((game) => (
-          <GameCardContainer key={game.id}>
-            <GameCard game={game} />
+  return (
+    <SimpleGrid
+      columns={{
+        sm: 1,
+        md: 2,
+        lg: 3,
+        xl: 4,
+      }}
+      spacing={6}
+      padding="10px"
+    >
+      {isLoading &&
+        skeletons.map((skeleton) => (
+          <GameCardContainer key={skeleton}>
+            <GameCardSkeleton />
           </GameCardContainer>
         ))}
-      </SimpleGrid>
-    </>
+
+      {games.map((game) => (
+        <GameCardContainer key={game.id}>
+          <GameCard game={game} />
+        </GameCardContainer>
+      ))}
+    </SimpleGrid>
   );
 };

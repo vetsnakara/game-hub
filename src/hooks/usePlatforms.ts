@@ -1,3 +1,4 @@
+import { platforms } from "../data/platforms";
 import { useData } from "./useData";
 
 export interface Platform {
@@ -6,5 +7,10 @@ export interface Platform {
   slug: string;
 }
 
-export const usePlatforms = () =>
-  useData<Platform>({ endpoint: "/platforms/lists/parents" });
+type UsePlatformsReturnType = ReturnType<typeof useData<Platform>>;
+
+export const usePlatforms = (): UsePlatformsReturnType => ({
+  data: platforms,
+  isLoading: false,
+  error: "",
+});

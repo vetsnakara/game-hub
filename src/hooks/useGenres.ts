@@ -1,4 +1,5 @@
 import { useData } from "./useData";
+import { genres } from "../data/genres";
 
 export interface Genre {
   id: number;
@@ -6,4 +7,10 @@ export interface Genre {
   image_background: string;
 }
 
-export const useGenres = () => useData<Genre>({ endpoint: "/genres" });
+type UseGenresReturnType = ReturnType<typeof useData<Genre>>;
+
+export const useGenres = (): UseGenresReturnType => ({
+  data: genres,
+  isLoading: false,
+  error: "",
+});

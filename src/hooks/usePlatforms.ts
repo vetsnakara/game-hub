@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { CACHE_KEY_PLATFORMS } from "../constants";
-import { FetchResponse, api } from "../services/apiClient";
+import { ApiClient } from "../services/apiClient";
 import { platforms } from "../data/platforms";
 
 export interface Platform {
@@ -9,6 +9,8 @@ export interface Platform {
   name: string;
   slug: string;
 }
+
+const apiClient = new ApiClient<Platform>("/platforms/lists/parents");
 export interface Game {
   id: number;
   name: string;
@@ -23,13 +25,7 @@ export interface Game {
 export const usePlatforms = () =>
   useQuery<Platform[], Error>({
     queryKey: CACHE_KEY_PLATFORMS,
-    queryFn: () =>
-      api
-        .get<FetchResponse<Platform>>("/platforms/lists/parents")
-        .then((res) => {
-          console.log("res", res);
-          return res.data.results;
-        }),
+    queryFn: apiClient.getAll,
     staleTime: 24 * 60 * 60 * 1000, // 24h
     initialData: platforms,
   });

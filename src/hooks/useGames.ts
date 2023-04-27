@@ -2,9 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 
 import { GameQuery } from "../App";
 import { CACHE_KEY_GAMES } from "../constants";
-import { FetchResponse, api } from "../services/apiClient";
+import { ApiClient } from "../services/apiClient";
 
 import { Platform } from "./usePlatforms";
+
+const apiClient = new ApiClient<Game>("/games");
 
 export interface Game {
   id: number;
@@ -29,9 +31,6 @@ export const useGames = (gameQuery: GameQuery) => {
 
   return useQuery<Game[], Error>({
     queryKey: [...CACHE_KEY_GAMES, gameQuery],
-    queryFn: () =>
-      api
-        .get<FetchResponse<Game>>("/games", { params })
-        .then((res) => res.data.results),
+    queryFn: () => apiClient.getAll({ params }),
   });
 };

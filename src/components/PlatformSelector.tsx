@@ -11,7 +11,10 @@ interface Props {
 export const PlatformSelector = (props: Props) => {
   const { onSelectPlatform, selectedPlatform } = props;
 
-  const { data: platforms, error } = usePlatforms();
+  const {
+    data: { results: platforms },
+    error,
+  } = usePlatforms();
 
   if (error) return null;
 

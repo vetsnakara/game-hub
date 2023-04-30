@@ -1,11 +1,11 @@
 import { useInfiniteQuery, QueryFunctionContext } from "@tanstack/react-query";
 import ms from "ms";
 
-import { GameQuery } from "../App";
 import { CACHE_KEY_GAMES } from "../constants";
 import { ApiClient, FetchResponse } from "../services/apiClient";
 
 import { Platform } from "./usePlatforms";
+import { useGameQueryStore } from "../store";
 
 const apiClient = new ApiClient<Game>("/games");
 
@@ -22,7 +22,9 @@ export interface Game {
 
 type GamesResponse = FetchResponse<Game>;
 
-export const useGames = (gameQuery: GameQuery) => {
+export const useGames = () => {
+  const gameQuery = useGameQueryStore((s) => s.gameQuery);
+
   const { genreId, platformId, sortOrder, searchText } = gameQuery;
 
   const queryFn = ({ pageParam = 1 }: QueryFunctionContext) => {

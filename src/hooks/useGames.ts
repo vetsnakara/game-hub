@@ -22,12 +22,12 @@ export interface Game {
 type GamesResponse = FetchResponse<Game>;
 
 export const useGames = (gameQuery: GameQuery) => {
-  const { genre, platform, sortOrder, searchText } = gameQuery;
+  const { genreId, platformId, sortOrder, searchText } = gameQuery;
 
   const queryFn = ({ pageParam = 1 }: QueryFunctionContext) => {
     const params = {
-      genres: genre?.id,
-      parent_platforms: platform?.id,
+      genres: genreId,
+      parent_platforms: platformId,
       ordering: sortOrder,
       search: searchText,
       page: pageParam,

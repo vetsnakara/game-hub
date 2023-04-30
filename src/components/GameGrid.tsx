@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, SimpleGrid, Text } from "@chakra-ui/react";
+import { SimpleGrid, Text } from "@chakra-ui/react";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 import { GameQuery } from "../App";
@@ -25,8 +25,6 @@ export const GameGrid = (props: Props) => {
     fetchNextPage,
     hasNextPage,
   } = useGames(gameQuery);
-
-  console.log("data.pages", data?.pages);
 
   if (error) {
     return <Text>{error.message}</Text>;

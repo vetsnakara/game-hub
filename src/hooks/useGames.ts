@@ -1,4 +1,5 @@
 import { useInfiniteQuery, QueryFunctionContext } from "@tanstack/react-query";
+import ms from "ms";
 
 import { GameQuery } from "../App";
 import { CACHE_KEY_GAMES } from "../constants";
@@ -40,7 +41,7 @@ export const useGames = (gameQuery: GameQuery) => {
   return useInfiniteQuery<GamesResponse, Error>({
     queryKey: [CACHE_KEY_GAMES, gameQuery],
     queryFn,
-    staleTime: 24 * 60 * 60 * 1000, // 24h
+    staleTime: ms("24h"),
     keepPreviousData: true,
     getNextPageParam: (lastPage, allPages) =>
       lastPage.next ? allPages.length + 1 : undefined,

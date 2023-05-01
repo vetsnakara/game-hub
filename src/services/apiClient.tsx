@@ -18,4 +18,7 @@ export class ApiClient<T> {
 
   getAll = (config: AxiosRequestConfig) =>
     api.get<FetchResponse<T>>(this.endpoint, config).then((res) => res.data);
+
+  get = (id: string | number) =>
+    api.get<T>(`${this.endpoint}/${id}`).then((res) => res.data);
 }

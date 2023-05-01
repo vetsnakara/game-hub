@@ -4,12 +4,7 @@ import ms from "ms";
 import { CACHE_KEY_PLATFORMS } from "../constants";
 import { ApiClient, FetchResponse } from "../services/apiClient";
 import { platforms } from "../data/platforms";
-
-export interface Platform {
-  id: number;
-  name: string;
-  slug: string;
-}
+import { Platform } from "../entitites/Platform";
 
 type PlatformsResponse = FetchResponse<Platform>;
 
